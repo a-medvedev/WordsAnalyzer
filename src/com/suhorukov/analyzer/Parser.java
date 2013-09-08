@@ -90,7 +90,7 @@ public class Parser {
             System.out.println("Невозможно открыть выходной файл. Программа остановлена.");
             System.exit(2);
         }
-
+        //Общее кол-во слов
         int wordCount = 0;
         for (Integer value : popularity.values()){
             wordCount += value.intValue();

@@ -5,7 +5,6 @@ public class WordAnalyzer {
         Parser p = new Parser("D:\\mm.txt");
         p.parse();
         p.sortList();
-        //p.printList();
         p.dumpToFile();
     }
 }
