@@ -9,22 +9,20 @@ import java.util.*;
 
 
 public class Parser {
-    private FileReader fReader;
+
     private StringBuilder word = new StringBuilder();
     private Map<String, Integer> popularity = new HashMap<String, Integer>();
     private List<String> words = new LinkedList<String>();
 
-    public Parser (String fileName){
+    public void parse(String fileName){
+        int c = 0;
+        FileReader fReader = null;
         try {
             fReader = new FileReader(fileName);
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден. Завершение программы.");
             System.exit(1);
         }
-    }
-
-    public void parse(){
-        int c = 0;
         //Читаем посимвольно
         while (c != -1){
             try {
@@ -50,6 +48,12 @@ public class Parser {
         //Скидываем слова в массив
         for(String key : popularity.keySet()){
             words.add(key);
+        }
+
+        try {
+            fReader.close();
+        } catch (IOException e) {
+            System.out.println("Ошибка при закрытии входного файла.");
         }
     }
 
@@ -93,7 +97,7 @@ public class Parser {
         //Общее кол-во слов
         int wordCount = 0;
         for (Integer value : popularity.values()){
-            wordCount += value.intValue();
+            wordCount += value;
         }
 
         for (String w : words){
@@ -105,6 +109,12 @@ public class Parser {
                 System.out.println("Ошибка записи в выходной файл. Программа остановлена.");
                 System.exit(3);
             }
+        }
+
+        try {
+            fWriter.close();
+        } catch (IOException e) {
+            System.out.println("Ошибка при закрытии выходного файла.");
         }
     }
 }
