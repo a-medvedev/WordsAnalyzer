@@ -6,5 +6,6 @@ public class WordAnalyzer {
         p.parse("D:\\mm.txt");
         p.sortList();
         p.dumpToFile();
+
     }
 }

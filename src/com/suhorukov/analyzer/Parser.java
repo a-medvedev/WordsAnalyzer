@@ -50,6 +50,7 @@ public class Parser {
             words.add(key);
         }
 
+        //освобождение ресурсов (входной файл)
         try {
             fReader.close();
         } catch (IOException e) {
@@ -111,6 +112,7 @@ public class Parser {
             }
         }
 
+        //освобождение ресурсов (выходной файл)
         try {
             fWriter.close();
         } catch (IOException e) {
