@@ -38,6 +38,7 @@ public class Parser {
             System.exit(1);
         } catch (IOException e) {
             System.out.println("Произошла ошибка чтения файла.");
+            System.exit(2);
         }
 
         //Скидываем слова в массив
