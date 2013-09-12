@@ -14,7 +14,7 @@ public class Parser {
     private Map<String, Integer> popularity = new HashMap<String, Integer>();
     private List<String> words = new LinkedList<String>();
 
-    public void parse(String fileName){
+    public boolean parse(String fileName){
         int c = 0;
 
         try (FileReader fReader = new FileReader(fileName)){
@@ -35,16 +35,17 @@ public class Parser {
             }
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден. Завершение программы.");
-            System.exit(1);
+            return false;
         } catch (IOException e) {
             System.out.println("Произошла ошибка чтения файла.");
-            System.exit(2);
+            return false;
         }
 
         //Скидываем слова в массив
         for(String key : popularity.keySet()){
             words.add(key);
         }
+        return true;
     }
 
     private void putWord(String word){
@@ -86,7 +87,7 @@ public class Parser {
         Collections.sort(words, cmp);
     }
 
-    public void dumpToFile(){
+    public boolean dumpToFile(){
         //Общее кол-во слов
         int wordCount = 0;
         for (Integer value : popularity.values()){
@@ -101,8 +102,9 @@ public class Parser {
             }
         } catch (IOException e) {
             System.out.println("Ошибка записи в выходной файл. Программа остановлена.");
-            System.exit(3);
+            return false;
         }
+        return true;
    }
 }
 
