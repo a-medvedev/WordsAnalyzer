@@ -16,45 +16,43 @@ public class Parser {
 
     public void parse(String fileName){
         int c = 0;
-        FileReader fReader = null;
-        try {
-            fReader = new FileReader(fileName);
+
+        try (FileReader fReader = new FileReader(fileName)){
+            //Читаем посимвольно
+            while (c != -1){
+                c = fReader.read();
+
+                if (Character.isLetterOrDigit(c)){
+                    word.append((char)c);
+                } else {    //Если символ - не буква, скидываем получившееся слово в мэп
+                    putWord(word.toString());
+                    word = new StringBuilder();
+                }
+                //Если достигнут конец входного файла
+                if (c == -1){
+                    putWord(word.toString());
+                }
+            }
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден. Завершение программы.");
             System.exit(1);
-        }
-        //Читаем посимвольно
-        while (c != -1){
-            try {
-                c = fReader.read();
-            } catch (IOException e) {
-                System.out.println("Произошла ошибка чтения файла.");
-            }
-
-            if (Character.isLetterOrDigit(c)){
-                word.append((char)c);
-            } else {    //Если символ - не буква, скидываем получившееся слово в мэп
-                if (popularity.containsKey(word.toString().toLowerCase()) && !(word.toString().isEmpty())){
-                    int val = popularity.get(word.toString().toLowerCase());
-                    val++;
-                    popularity.put(word.toString().toLowerCase(), val);
-                } else {
-                    popularity.put(word.toString().toLowerCase(), 1);
-                }
-                word = new StringBuilder();
-            }
+        } catch (IOException e) {
+            System.out.println("Произошла ошибка чтения файла.");
         }
 
         //Скидываем слова в массив
         for(String key : popularity.keySet()){
             words.add(key);
         }
+    }
 
-        //освобождение ресурсов (входной файл)
-        try {
-            fReader.close();
-        } catch (IOException e) {
-            System.out.println("Ошибка при закрытии входного файла.");
+    private void putWord(String word){
+        if (popularity.containsKey(word.toLowerCase()) && !(word.isEmpty())){
+            int val = popularity.get(word.toLowerCase());
+            val++;
+            popularity.put(word.toLowerCase(), val);
+        } else {
+            popularity.put(word.toLowerCase(), 1);
         }
     }
 
@@ -88,37 +86,23 @@ public class Parser {
     }
 
     public void dumpToFile(){
-        FileWriter fWriter = null;
-        try {
-            fWriter = new FileWriter("out.csv");
-        } catch (IOException e) {
-            System.out.println("Невозможно открыть выходной файл. Программа остановлена.");
-            System.exit(2);
-        }
         //Общее кол-во слов
         int wordCount = 0;
         for (Integer value : popularity.values()){
             wordCount += value;
         }
 
-        for (String w : words){
-            double percent = popularity.get(w) / (double)wordCount * 100;
-            String str = w + "," + popularity.get(w).toString() + "," + percent + "\n";
-            try {
+        try(FileWriter fWriter = new FileWriter("out.csv")){
+            for (String w : words){
+                double percent = popularity.get(w) / (double)wordCount * 100;
+                String str = w + "," + popularity.get(w).toString() + "," + percent + "\n";
                 fWriter.write(str);
-            } catch (IOException e) {
-                System.out.println("Ошибка записи в выходной файл. Программа остановлена.");
-                System.exit(3);
             }
-        }
-
-        //освобождение ресурсов (выходной файл)
-        try {
-            fWriter.close();
         } catch (IOException e) {
-            System.out.println("Ошибка при закрытии выходного файла.");
+            System.out.println("Ошибка записи в выходной файл. Программа остановлена.");
+            System.exit(3);
         }
-    }
+   }
 }
 
 
