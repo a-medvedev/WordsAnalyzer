@@ -34,7 +34,7 @@ public class Parser {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден. Завершение программы.");
+            System.out.println("Файл не найден.");
             return false;
         } catch (IOException e) {
             System.out.println("Произошла ошибка чтения файла.");
